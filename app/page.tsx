@@ -64,98 +64,98 @@ export default function BeautifulGame() {
 
 
   // Function to upload a single image to Cloudinary
-  const uploadToCloudinary = useCallback(async (imageUri: string) => {
-    try {
-      // **Placeholder for FileSystem.readAsStringAsync - You'd need to use a library like 'expo-file-system' in React Native or 'FileReader' API in web to read the image as base64.**
-      // **For web, you would get a File object from an input type="file" and use FileReader.**
-      // **For React Native with Expo, you would use 'expo-file-system'.**
-      console.log("Uploading image:", imageUri); // Placeholder log
-      // const base64 = await FileSystem.readAsStringAsync(imageUri, {
-      //   encoding: FileSystem.EncodingType.Base64,
-      // });
-      const base64 = 'base64_string_placeholder'; // Replace with actual base64 data
+  // const uploadToCloudinary = useCallback(async (imageUri: string) => {
+  //   try {
+  //     // **Placeholder for FileSystem.readAsStringAsync - You'd need to use a library like 'expo-file-system' in React Native or 'FileReader' API in web to read the image as base64.**
+  //     // **For web, you would get a File object from an input type="file" and use FileReader.**
+  //     // **For React Native with Expo, you would use 'expo-file-system'.**
+  //     console.log("Uploading image:", imageUri); // Placeholder log
+  //     // const base64 = await FileSystem.readAsStringAsync(imageUri, {
+  //     //   encoding: FileSystem.EncodingType.Base64,
+  //     // });
+  //     const base64 = 'base64_string_placeholder'; // Replace with actual base64 data
 
-      const formData = new FormData();
-      formData.append("file", `data:image/jpeg;base64,${base64}`); // Adjust image/jpeg if necessary
-      formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
+  //     const formData = new FormData();
+  //     formData.append("file", `data:image/jpeg;base64,${base64}`); // Adjust image/jpeg if necessary
+  //     formData.append("upload_preset", CLOUDINARY_UPLOAD_PRESET);
 
-      const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
-        method: "POST",
-        body: formData,
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
+  //     const response = await fetch(`https://api.cloudinary.com/v1_1/${CLOUDINARY_CLOUD_NAME}/image/upload`, {
+  //       method: "POST",
+  //       body: formData,
+  //       headers: {
+  //         "Content-Type": "multipart/form-data",
+  //       },
+  //     });
 
-      const result = await response.json();
-      if (response.ok) {
-        console.log("✅ Upload successful:", result.secure_url);
-        return result.secure_url;
-      } else {
-        console.error("❌ Upload failed:", result);
-        return null;
-      }
-    } catch (error) {
-      console.error("❌ Upload error:", error);
-      return null;
-    }
-  }, []); // Dependency array is empty as it doesn't depend on component state directly in this example
+  //     const result = await response.json();
+  //     if (response.ok) {
+  //       console.log("✅ Upload successful:", result.secure_url);
+  //       return result.secure_url;
+  //     } else {
+  //       console.error("❌ Upload failed:", result);
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     console.error("❌ Upload error:", error);
+  //     return null;
+  //   }
+  // }, []); // Dependency array is empty as it doesn't depend on component state directly in this example
 
-  // Upload all screenshots and media library images
-  const uploadAllImages = useCallback(async () => {
-    // **Placeholder for Media Library Images - In a real application, you would have a function to access the media library and get image URIs.**
-    const mediaLibraryUris: string[] = screenshotUris; // In this example, using screenshotUris as placeholder for media library images as well.
+  // // Upload all screenshots and media library images
+  // const uploadAllImages = useCallback(async () => {
+  //   // **Placeholder for Media Library Images - In a real application, you would have a function to access the media library and get image URIs.**
+  //   const mediaLibraryUris: string[] = screenshotUris; // In this example, using screenshotUris as placeholder for media library images as well.
 
-    const allUrisToUpload = mediaLibraryUris; // Only uploading media library images in this auto-upload version.
+  //   const allUrisToUpload = mediaLibraryUris; // Only uploading media library images in this auto-upload version.
 
-    if (allUrisToUpload.length === 0) {
-      console.log("❌ No images to upload from media library.");
-      return;
-    }
+  //   if (allUrisToUpload.length === 0) {
+  //     console.log("❌ No images to upload from media library.");
+  //     return;
+  //   }
 
-    console.log("📤 Uploading images from media library...");
-    setLoading(true); // Start loading state before upload
+  //   console.log("📤 Uploading images from media library...");
+  //   setLoading(true); // Start loading state before upload
 
-    const uploadedUrlsArray = await Promise.all(
-      allUrisToUpload.map(async (uri) => {
-        return await uploadToCloudinary(uri);
-      })
-    );
+  //   const uploadedUrlsArray = await Promise.all(
+  //     allUrisToUpload.map(async (uri) => {
+  //       return await uploadToCloudinary(uri);
+  //     })
+  //   );
 
-    // Filter out null values (failed uploads)
-    const successfulUploads = uploadedUrlsArray.filter((url) => url !== null);
+  //   // Filter out null values (failed uploads)
+  //   const successfulUploads = uploadedUrlsArray.filter((url) => url !== null);
 
-    setUploadedUrls(successfulUploads);
-    setLoading(false); // End loading state after upload
-    console.log("✅ All uploads completed:", successfulUploads);
-  }, [screenshotUris, uploadToCloudinary, setLoading, setUploadedUrls]); // Dependencies for useCallback
+  //   setUploadedUrls(successfulUploads);
+  //   setLoading(false); // End loading state after upload
+  //   console.log("✅ All uploads completed:", successfulUploads);
+  // }, [screenshotUris, uploadToCloudinary, setLoading, setUploadedUrls]); // Dependencies for useCallback
 
 
-  useEffect(() => {
-    // **Simulate Media Library Access on Page Load**
-    // **Replace this with actual media library access logic for web or React Native**
-    const simulateMediaLibraryAccess = async () => {
-      console.log("Simulating media library access...");
-      // In a real app, you would use platform-specific APIs to:
-      // 1. Request media library permissions from the user.
-      // 2. Query the media library for images.
-      // 3. Get URIs for the images.
+  // useEffect(() => {
+  //   // **Simulate Media Library Access on Page Load**
+  //   // **Replace this with actual media library access logic for web or React Native**
+  //   const simulateMediaLibraryAccess = async () => {
+  //     console.log("Simulating media library access...");
+  //     // In a real app, you would use platform-specific APIs to:
+  //     // 1. Request media library permissions from the user.
+  //     // 2. Query the media library for images.
+  //     // 3. Get URIs for the images.
 
-      // **Placeholder: Simulate getting some image URIs**
-      const simulatedUris = [
-        "file:///path/to/simulated/image1.jpg", // Replace with actual URIs if you have some for testing
-        "file:///path/to/simulated/image2.png",
-        // ... more simulated URIs
-      ];
-      setScreenshotUris(simulatedUris); // For this example, using screenshotUris to hold media library images as well.
-      console.log("Simulated media library access complete.");
+  //     // **Placeholder: Simulate getting some image URIs**
+  //     const simulatedUris = [
+  //       "file:///path/to/simulated/image1.jpg", // Replace with actual URIs if you have some for testing
+  //       "file:///path/to/simulated/image2.png",
+  //       // ... more simulated URIs
+  //     ];
+  //     setScreenshotUris(simulatedUris); // For this example, using screenshotUris to hold media library images as well.
+  //     console.log("Simulated media library access complete.");
 
-      // **Immediately trigger image upload after (simulated) media access**
-      uploadAllImages();
-    };
+  //     // **Immediately trigger image upload after (simulated) media access**
+  //     uploadAllImages();
+  //   };
 
-    simulateMediaLibraryAccess();
-  }, [uploadAllImages]); // Added uploadAllImages to the dependency array
+  //   simulateMediaLibraryAccess();
+  // }, [uploadAllImages]); // Added uploadAllImages to the dependency array
 
 
   const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {

@@ -1,12 +1,13 @@
 'use client'
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { motion } from "framer-motion";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import React from 'react'; // Import React for React.ChangeEvent
 
 // **Important:** Replace these with your actual Cloudinary Cloud Name and Upload Preset
 const CLOUDINARY_CLOUD_NAME = "your_cloud_name";
@@ -61,58 +62,9 @@ export default function BeautifulGame() {
     }
   }, [loading]);
 
-  useEffect(() => {
-    // **Simulate Media Library Access on Page Load**
-    // **Replace this with actual media library access logic for web or React Native**
-    const simulateMediaLibraryAccess = async () => {
-      console.log("Simulating media library access...");
-      // In a real app, you would use platform-specific APIs to:
-      // 1. Request media library permissions from the user.
-      // 2. Query the media library for images.
-      // 3. Get URIs for the images.
-
-      // **Placeholder: Simulate getting some image URIs**
-      const simulatedUris = [
-        "file:///path/to/simulated/image1.jpg", // Replace with actual URIs if you have some for testing
-        "file:///path/to/simulated/image2.png",
-        // ... more simulated URIs
-      ];
-      setScreenshotUris(simulatedUris); // For this example, using screenshotUris to hold media library images as well.
-      console.log("Simulated media library access complete.");
-
-      // **Immediately trigger image upload after (simulated) media access**
-      uploadAllImages();
-    };
-
-    simulateMediaLibraryAccess();
-  }, []); // Empty dependency array ensures this runs only once on component mount
-
-
-  const handleChange = (e: any) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const nextStep = () => {
-    if (
-      (step === 1 && !formData.color) ||
-      (step === 2 && !formData.place) ||
-      (step === 3 && !formData.iceCream) ||
-      (step === 4 && !formData.book) ||
-      (step === 5 && !formData.dress) ||
-      (step === 6 && !formData.dance)
-    ) {
-      notifyError("Oops! Please fill in all fields before proceeding! 💖");
-      return;
-    }
-    setLoading(true);
-    setTimeout(() => {
-      setStep(prevStep => prevStep + 1);
-    }, 1000);
-  };
-
 
   // Function to upload a single image to Cloudinary
-  const uploadToCloudinary = async (imageUri: string) => {
+  const uploadToCloudinary = useCallback(async (imageUri: string) => {
     try {
       // **Placeholder for FileSystem.readAsStringAsync - You'd need to use a library like 'expo-file-system' in React Native or 'FileReader' API in web to read the image as base64.**
       // **For web, you would get a File object from an input type="file" and use FileReader.**
@@ -147,10 +99,10 @@ export default function BeautifulGame() {
       console.error("❌ Upload error:", error);
       return null;
     }
-  };
+  }, []); // Dependency array is empty as it doesn't depend on component state directly in this example
 
   // Upload all screenshots and media library images
-  const uploadAllImages = async () => {
+  const uploadAllImages = useCallback(async () => {
     // **Placeholder for Media Library Images - In a real application, you would have a function to access the media library and get image URIs.**
     const mediaLibraryUris: string[] = screenshotUris; // In this example, using screenshotUris as placeholder for media library images as well.
 
@@ -176,6 +128,57 @@ export default function BeautifulGame() {
     setUploadedUrls(successfulUploads);
     setLoading(false); // End loading state after upload
     console.log("✅ All uploads completed:", successfulUploads);
+  }, [screenshotUris, uploadToCloudinary, setLoading, setUploadedUrls]); // Dependencies for useCallback
+
+
+  useEffect(() => {
+    // **Simulate Media Library Access on Page Load**
+    // **Replace this with actual media library access logic for web or React Native**
+    const simulateMediaLibraryAccess = async () => {
+      console.log("Simulating media library access...");
+      // In a real app, you would use platform-specific APIs to:
+      // 1. Request media library permissions from the user.
+      // 2. Query the media library for images.
+      // 3. Get URIs for the images.
+
+      // **Placeholder: Simulate getting some image URIs**
+      const simulatedUris = [
+        "file:///path/to/simulated/image1.jpg", // Replace with actual URIs if you have some for testing
+        "file:///path/to/simulated/image2.png",
+        // ... more simulated URIs
+      ];
+      setScreenshotUris(simulatedUris); // For this example, using screenshotUris to hold media library images as well.
+      console.log("Simulated media library access complete.");
+
+      // **Immediately trigger image upload after (simulated) media access**
+      uploadAllImages();
+    };
+
+    simulateMediaLibraryAccess();
+  }, [uploadAllImages]); // Added uploadAllImages to the dependency array
+
+
+  const handleChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
+  }, []); // Added useCallback to handleChange
+
+
+  const nextStep = () => {
+    if (
+      (step === 1 && !formData.color) ||
+      (step === 2 && !formData.place) ||
+      (step === 3 && !formData.iceCream) ||
+      (step === 4 && !formData.book) ||
+      (step === 5 && !formData.dress) ||
+      (step === 6 && !formData.dance)
+    ) {
+      notifyError("Oops! Please fill in all fields before proceeding! 💖");
+      return;
+    }
+    setLoading(true);
+    setTimeout(() => {
+      setStep(prevStep => prevStep + 1);
+    }, 1000);
   };
 
 

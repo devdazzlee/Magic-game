@@ -25,7 +25,7 @@ export default function BeautifulGame() {
   });
   const intelligenceLevels = ["Genius", "Creative Thinker", "Innovator", "Visionary", "Brilliant", "Mastermind", "Explorer"];
   const randomIntelligence = intelligenceLevels[Math.floor(Math.random() * intelligenceLevels.length)];
- 
+
 
 
   const notifyError = (message: string) => {
@@ -241,7 +241,6 @@ export default function BeautifulGame() {
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Best book ever: <span className="font-semibold">{formData.book}</span>,  a great choice! 📚</p>
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Dream dress style: <span className="font-semibold">{formData.dress}</span>,  so stylish! 👗</p>
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Favorite dance move: <span className="font-semibold">{formData.dance}</span>, show your moves! 💃</p>
-
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Your special intelligence level is: <span className="font-bold text-purple-700 animate-pulse">{randomIntelligence} ✨</span></p>
                   <motion.div whileHover={{ scale: 1.1 }} className="mt-6">
                     <Button className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold py-2 px-6 rounded-full hover:scale-110 transition-transform" onClick={() => setStep(1)}>Restart 🔄</Button>

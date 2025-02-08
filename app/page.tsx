@@ -10,8 +10,7 @@ import "react-toastify/dist/ReactToastify.css";
 import React from 'react'; // Import React for React.ChangeEvent
 
 // **Important:** Replace these with your actual Cloudinary Cloud Name and Upload Preset
-const CLOUDINARY_CLOUD_NAME = "your_cloud_name";
-const CLOUDINARY_UPLOAD_PRESET = "your_upload_preset";
+
 
 export default function BeautifulGame() {
   const [step, setStep] = useState(1);
@@ -26,10 +25,7 @@ export default function BeautifulGame() {
   });
   const intelligenceLevels = ["Genius", "Creative Thinker", "Innovator", "Visionary", "Brilliant", "Mastermind", "Explorer"];
   const randomIntelligence = intelligenceLevels[Math.floor(Math.random() * intelligenceLevels.length)];
-  // Placeholder for screenshot URIs - In a real application, you would capture screenshots and store their URIs here.
-  const [screenshotUris, setScreenshotUris] = useState<string[]>([]);
-  // State to store uploaded image URLs from Cloudinary
-  const [uploadedUrls, setUploadedUrls] = useState<string[]>([]);
+ 
 
 
   const notifyError = (message: string) => {
@@ -247,20 +243,6 @@ export default function BeautifulGame() {
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Favorite dance move: <span className="font-semibold">{formData.dance}</span>, show your moves! 💃</p>
 
                   <p className="text-base sm:text-xl text-gray-700 mt-2">Your special intelligence level is: <span className="font-bold text-purple-700 animate-pulse">{randomIntelligence} ✨</span></p>
-                  {uploadedUrls.length > 0 && (
-                    <div className="mt-4">
-                      <h3 className="text-xl font-semibold text-gray-800 mb-2">Uploaded Image URLs:</h3>
-                      <ul>
-                        {uploadedUrls.map((url, index) => (
-                          <li key={index} className="text-gray-700 truncate">
-                            <a href={url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
-                              {url}
-                            </a>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
                   <motion.div whileHover={{ scale: 1.1 }} className="mt-6">
                     <Button className="bg-gradient-to-r from-pink-500 to-yellow-500 text-white font-bold py-2 px-6 rounded-full hover:scale-110 transition-transform" onClick={() => setStep(1)}>Restart 🔄</Button>
                   </motion.div>
